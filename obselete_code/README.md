@@ -100,7 +100,7 @@ Before converging on the standardized pipeline now organized at the repository r
 | `extract_clip.py` / `generate_clips.py` | Unified and replaced by [`../extract_30s_back_clip.py`](../extract_30s_back_clip.py). |
 | `video_llava_api.py` | Modularized into [`../scene_description.py`](../scene_description.py) and [`../ads_description.py`](../ads_description.py). |
 | `llama.py` / `ollam_chatbot.py` | Replaced by embedding-based semantic matching using BGE embeddings in [`../mapping_scene_with_ads.py`](../mapping_scene_with_ads.py). |
-| `video_processing.py` | Logic incorporated into utility functions in [`../fn_utils.py`](../fn_utils.py). |
+| `video_processing.py` | Logic incorporated into utility functions in [`../src/utils.py`](../src/utils.py). |
 
 ---
 
