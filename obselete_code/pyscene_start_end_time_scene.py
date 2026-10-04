@@ -6,6 +6,15 @@ from scenedetect.detectors import AdaptiveDetector
 from scenedetect.video_splitter import split_video_ffmpeg
 from scenedetect.frame_timecode import FrameTimecode
 import json
+from moviepy.video.io.VideoFileClip import VideoFileClip
+import os
+
+def format_time(seconds):
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    seconds = int(seconds % 60)
+    return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+
 
 def calculate_time_ranges(video_path, start_offset=25, end_offset = 30):
     video = VideoFileClip(video_path)
@@ -37,19 +46,6 @@ def calculate_time_ranges(video_path, start_offset=25, end_offset = 30):
     
     return start_time_formatted, end_time_formatted
 
-def format_time(seconds):
-    hours = int(seconds // 3600)
-    minutes = int((seconds % 3600) // 60)
-    seconds = int(seconds % 60)
-    return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-
-# video_path = r"C:\Users\NH3183\OneDrive - Brane Enterprises Pvt Limited\Desktop\Netflix Poc\Inception_720p.mp4"
-# start_time, end_time = calculate_time_ranges(video_path)
-# print(f"Start time: {start_time}")
-# print(f"End time: {end_time}")
-
-from moviepy.video.io.VideoFileClip import VideoFileClip
-import os
 
 def detect_and_split_scenes(video_path, start_time, end_time, frame_skip, min_scene_len, frame_window):
     # Create a video manager for the video file
@@ -111,11 +107,15 @@ def detect_and_split_scenes(video_path, start_time, end_time, frame_skip, min_sc
 
     # video_manager.release()
 
-# Example usage
-video_path = r"C:\Users\NH3183\OneDrive - Brane Enterprises Pvt Limited\Desktop\Netflix Poc\Inception_720p.mp4"
-start_time, end_time = calculate_time_ranges(video_path)
-frame_skip = 3          # Skipping three frames - It increases the processing speed
-min_scene_len = 23000   # Equivalent to atleast 16 min clip
-frame_window = 5        # To match the content in 5 frames
+if __name__ == '__main__':
+    video_path = r".\Movie\Inception_720p.mp4"
+    start_time, end_time = calculate_time_ranges(video_path)
+    print(f"Start time: {start_time}")
+    print(f"End time: {end_time}")
 
-detect_and_split_scenes(video_path, start_time, end_time, frame_skip, min_scene_len, frame_window)
+    start_time, end_time = calculate_time_ranges(video_path)
+    frame_skip = 3          # Skipping three frames - It increases the processing speed
+    min_scene_len = 23000   # Equivalent to atleast 16 min clip
+    frame_window = 5        # To match the content in 5 frames
+
+    detect_and_split_scenes(video_path, start_time, end_time, frame_skip, min_scene_len, frame_window)

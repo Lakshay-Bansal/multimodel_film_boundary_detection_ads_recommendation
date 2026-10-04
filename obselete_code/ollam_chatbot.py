@@ -1,6 +1,5 @@
 import ollama
-# print(help(ollama.chat))
-# ollama.load('C:\Users\NH3183\.ollama\models\blobs\sha256-6a0746a1ec1aef3e7ec53868f220ff6e389f6f8ef87a01d77c96807de94ca2aa')
+
 response  = ollama.chat(model='llama3', messages=[
     {
         'role': 'user',

@@ -25,16 +25,17 @@ def generate_clips(video_file_path, frames, output_dir):
         output_path = os.path.join(output_dir, f'clip_{i+1}.mp4')
         clip.write_videofile(output_path, codec='libx264')
 
-# Example usage
-folder = r'C:\Users\NH3183\OneDrive - Brane Enterprises Pvt Limited\Desktop\TransNetV2\inference'
-movie_name = 'Inception_720p_2min'
-video_file_path = os.path.join(folder, f'{movie_name}.mp4')
-txt_file_path = os.path.join(folder, f'{movie_name}.mp4.scenes.txt')
-output_dir = os.path.join(folder, f'Clips_{movie_name}')
-if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+if __name__=='__main__':
+    # Example usage
+    folder = r'.\TransNetV2\inference'
+    movie_name = 'Inception_720p_2min'
+    video_file_path = os.path.join(folder, f'{movie_name}.mp4')
+    txt_file_path = os.path.join(folder, f'{movie_name}.mp4.scenes.txt')
+    output_dir = os.path.join(folder, f'Clips_{movie_name}')
+    if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
 
-frames = read_frames_from_file(txt_file_path)
-print(frames)
-generate_clips(video_file_path, frames, output_dir)
+    frames = read_frames_from_file(txt_file_path)
+    print(frames)
+    generate_clips(video_file_path, frames, output_dir)
 

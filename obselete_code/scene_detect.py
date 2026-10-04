@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jun  3 17:24:35 2024
-
-@author: NH3183
+Created on Mon Jun  3 17:24:35 2026
 """
 
 from scenedetect import detect, AdaptiveDetector
@@ -12,7 +10,7 @@ import cv2
 import math
 import os
 
-video_path = r"C:\Users\NH3183\OneDrive - Brane Enterprises Pvt Limited\Desktop\Netflix Poc"
+video_path = r".\/Movie"
 input_file_path = os.path.join(video_path, "Inception_720p_2min.mp4")  # Replace with your input file path
  
 video_local_path = input_file_path
@@ -53,6 +51,3 @@ os.makedirs(save_folder, exist_ok=True)
 
 for i, frame in enumerate(frames):
     frame.save(f"{save_folder}/scene{i+1}.jpg")
-
-
-
