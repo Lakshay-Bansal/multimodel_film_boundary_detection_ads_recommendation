@@ -128,14 +128,23 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 5. Setup Video-LLaVA Endpoint
-The captioning scripts (`ads_description.py` and `scene_description.py`) query a Video-LLaVA microservice via HTTP POST:
-- Ensure your Video-LLaVA service is running (or hosted remotely).
-- Update the `url` variable in `ads_description.py` and `scene_description.py` with your server IP and port:
-  ```python
-  url = 'http://<YOUR_SERVER_IP>:8084/describe_video'
-  ```
-*(Note: If you already have `ads_description.csv` and `scene_description.csv` precomputed in `Ads/` and `result/`, you can jump straight to testing embedding matching and the video player without running the Video-LLaVA server).*
+### 5. Configure Hugging Face API Key (Free Serverless Inference)
+Instead of requiring expensive self-hosted GPU endpoints, the pipeline now supports free Hugging Face Serverless Inference API models (such as `Salesforce/blip-image-captioning-large`).
+
+1. Obtain a free Hugging Face User Access Token (with Read permission) from:
+   👉 **[https://huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)**
+2. Create or update your `.env` file in the root directory:
+   ```env
+   # Hugging Face Access Token
+   HUGGINGFACE_API_KEY=hf_your_token_here
+
+   # Free Vision Model (Default)
+   HF_MODEL=Salesforce/blip-image-captioning-large
+
+   # Keyframes sampled per video clip (Default: 3)
+   HF_NUM_FRAMES=3
+   ```
+*(Note: If you have a self-hosted Video-LLaVA microservice, you can still optionally set `VIDEO_LLAVA_URL=http://<IP>:8084/describe_video` in `.env` as a fallback. If precomputed CSV files exist, the pipeline uses them directly).*
 
 ---
 
@@ -200,13 +209,14 @@ python -c "from src.extract_30s_back_clip import generate_30s_back_scene_clips; 
 ```bash
 python ads_description.py
 ```
-- Scans `Ads/` for MP4 ad files, streams them to the Video-LLaVA API, and compiles `Ads/ads_description.csv`.
+- Scans `Ads/` for MP4 ad files, extracts keyframes, queries the Hugging Face Serverless Vision API, and compiles `Ads/ads_description.csv`.
+- Optional flags: `python ads_description.py --model Salesforce/blip-image-captioning-large --frames 3`
 
 #### 3b. Describe Scene Clips:
 ```bash
 python -c "from src.scene_description import generate_scene_desc; generate_scene_desc('Spiderman 1.mkv')"
 ```
-- Scans `result/<movie_name>_scene_clips/`, requests visual captions, and saves `result/<movie_name>_scene_clips/scene_description.csv`.
+- Scans context clips, requests visual captions via Hugging Face Serverless API, and saves them directly to `Movie/<movie_name>/scene_description.csv`.
 
 ---
 

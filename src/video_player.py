@@ -297,7 +297,10 @@ if __name__ == "__main__":
     root.geometry("%dx%d" % (screen_width, screen_height))
     print("Screen width and height are: ", screen_width, screen_height)
 
-    scene_threshold_file = os.path.join(os.getcwd(), f'Movie\{movie_name}.theshold_scenes_final.txt')
+    movie_stem = os.path.splitext(os.path.basename(movie_name))[0]
+    scene_threshold_file = os.path.join(os.getcwd(), 'Movie', movie_stem, f'{movie_name}.theshold_scenes_final.txt')
+    if not os.path.exists(scene_threshold_file):
+        scene_threshold_file = os.path.join(os.getcwd(), 'Movie', f'{movie_name}.theshold_scenes_final.txt')
     scenes_df = pd.read_csv(scene_threshold_file, sep=' ', header=None)
     scenes_df.columns = ['start_frame', 'end_frame']
     scene_start_frames = list(scenes_df["start_frame"])
@@ -309,16 +312,20 @@ if __name__ == "__main__":
         generate_30s_back_scene_clips(movie_name)
 
     # Read ads and scene description csv files
-    path_scene_description_csv = os.path.join(os.getcwd(), f'result\{movie_name}_scene_clips\scene_description.csv')
+    movie_stem = os.path.splitext(os.path.basename(movie_name))[0]
+    path_scene_description_csv = os.path.join(os.getcwd(), 'Movie', movie_stem, 'scene_description.csv')
+    if not os.path.exists(path_scene_description_csv):
+        alt_scene = os.path.join(os.getcwd(), f'result/{movie_name}_scene_clips/scene_description.csv')
+        if os.path.exists(alt_scene):
+            path_scene_description_csv = alt_scene
 
-    if not os.path.exists( path_scene_description_csv):
-        # Generate scene description file for a movie
-        # Output path of csv file is ./result/{movie_name}_scene_clips/scene_description.csv
+    if not os.path.exists(path_scene_description_csv):
         print("------------------- Running generate scene description at the scene boundary")
         generate_scene_desc(movie_name)
+        path_scene_description_csv = os.path.join(os.getcwd(), 'Movie', movie_stem, 'scene_description.csv')
 
-    # For an update in Ads folder need to run ads_description.py once to generate ads_description.csv
-    path_ads_description_csv = os.path.join(os.getcwd(), 'ads_description.csv')
+    # Read ads description strictly from Ads folder
+    path_ads_description_csv = os.path.join(os.getcwd(), 'Ads', 'ads_description.csv')
 
     scene_description = pd.read_csv(path_scene_description_csv)
     ads_description = pd.read_csv(path_ads_description_csv)
